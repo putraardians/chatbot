@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SayHalo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e0e0e0, #90caf9);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gray-800 bg-opacity-75 p-8 rounded-lg shadow-lg w-80">
+        <h2 class="text-white text-2xl font-bold mb-6 text-center">Register Form</h2>
+        <form id="registerForm">
+            <div class="mb-4">
+                <label class="block text-gray-300 text-sm mb-2" for="username">Username</label>
+                <input class="w-full p-2 text-gray-300 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" type="text" id="username" name="username" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-300 text-sm mb-2" for="email">Email</label>
+                <input class="w-full p-2 text-gray-300 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" type="email" id="email" name="email" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-300 text-sm mb-2" for="password">Password</label>
+                <input class="w-full p-2 text-gray-300 bg-transparent border-b-2 border-gray-300 focus:outline-none focus:border-blue-500" type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Register</button>
+        </form>
+        <p class="text-gray-300 mt-4 text-center">
+            Sudah punya akun? <a href="login.html" class="text-blue-500 hover:underline">Login di sini</a>
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Mencegah refresh halaman
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            console.log("Form Data:", data); // Tambahkan ini untuk debug
+
+            try {
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                });
+
+                const result = await response.json();
+                alert(result.message);
+
+                if (response.status === 201) {
+                    window.location.href = '/'; // Ganti dengan rute login jika ada
+                }
+            } catch (error) {
+                console.error('Error during signup:', error);
+                alert('Terjadi kesalahan saat mendaftar.');
+            }
+        });
+    </script>
+</body>
+</html>
